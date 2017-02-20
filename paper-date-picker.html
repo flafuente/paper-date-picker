@@ -185,6 +185,14 @@ styling:
           notify: true
         },
         /**
+         * Type of view useful when selecting Birth dates
+         */
+        yearDisplay: {
+          type: Boolean,
+          value: false,
+          observer: '_yearDisplay'
+        },
+        /**
          * Maximum screen width at which the picker uses a vertical layout
          */
         responsiveWidth: {
@@ -279,6 +287,14 @@ styling:
           // to the selected month
           this.$.calendar.currentMonth = this.date.getMonth() + 1;
           this.$.calendar.currentYear = this.date.getFullYear();
+        }
+      },
+      _yearDisplay: function(condition) {
+        if(condition){
+          var _this = this;
+          setTimeout(function () {
+            _this._tapHeadingYear();
+          }, 1);
         }
       },
       _tapHeadingYear: function() {
