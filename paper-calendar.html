@@ -275,6 +275,19 @@
           observer: '_localeChanged'
         },
         /**
+         * Disabled dates to prevent selection
+         */
+        disabledDates: {
+          type: Array
+        },
+        /**
+         * Disable selection
+         */
+        disableSelection: {
+          type: Boolean,
+          value: false
+        },
+        /**
          * The minimum allowed date
          */
         minDate: {
@@ -431,7 +444,18 @@
         return cssClass;
       },
       _isDisabled: function(day, date) {
-        return !day || !this._withinValidRange(date);
+        return !day || !this._withinValidRange(date) || !this._withinValidRangeDisabled(date);
+      },
+      _withinValidRangeDisabled: function(date) {
+        if(this.disabledDates){
+          for (var i = 0; i < this.disabledDates.length; i++) {
+            if(dateDiff(date,this.disabledDates[i])===0){
+              return false;
+            }
+          }
+        }
+        return true;
+
       },
       _getMonthClass: function(name, month) {
         return name + ' month-' + month.year + '-' + month.month;
@@ -637,6 +661,9 @@
         this._updateSelection();
       },
       _tapDay: function(event) {
+        if(this.disableSelection){
+          return false;
+        }
         if (!this._withinValidRange(event.model.item.date)) {
           return false;
         }
